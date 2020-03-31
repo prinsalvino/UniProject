@@ -108,11 +108,11 @@ public class Main extends Application
 	
 		TableColumn<Teacher,String> fnamecolumn = new TableColumn<>("First Name");
 		fnamecolumn.setMinWidth(200);
-		fnamecolumn.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+		fnamecolumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		
 		TableColumn<Teacher,String> lnamecolumn = new TableColumn<>("Last Name");
 		lnamecolumn.setMinWidth(200);
-		lnamecolumn.setCellValueFactory(new PropertyValueFactory<>("lastname"));		
+		lnamecolumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));		
 		
 		TableColumn<Teacher,String> emailcolumn = new TableColumn<>("email");
 		emailcolumn.setMinWidth(200);
