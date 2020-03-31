@@ -15,22 +15,26 @@ public abstract class Person {
 		this.type = type;
 	}
 	
-	public String getfirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
-	public String setfirstName(String fname) {
-		return firstName = fname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 	
-	public String getlastName() {
+	public String getLastName() {
 		return lastName;
 	}
-	public String setlastName(String lname) {
-		return lastName = lname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public String getEmail() {
