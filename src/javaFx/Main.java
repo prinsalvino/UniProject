@@ -2,6 +2,9 @@ package javaFx;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application 
@@ -21,30 +25,25 @@ public class Main extends Application
 	Stage window;
 	Scene sceneLogin, sceneHome;
 	ObservableList<Person> persons = FXCollections.observableArrayList();
-	TableView<Teacher> teacherView;
 	
-	Manager currentManager;
-	Student currentStudent;
-	Teacher currentTeacher;
+
+	userQuery query = new userQuery();
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
-	private void generatePerson() {
-		Student student1 = new Student("Prins","Alvino","IT1","Prins123","prins@gmail.com");
-		Teacher teacher1 = new Teacher("Michael","Corneole","Michael123","michael@gmail.com");
-		Manager manager1 = new Manager("Justin","Hewlett","Justin123","justin@gmail.com");
-		
-		persons.add(student1);
-		persons.add(teacher1);
-		persons.add(manager1);
-		
-	}
-
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		generatePerson();
+		Student student1 = new Student("Prins","Alvino","IT1","Prins123","prins@gmail.com",80,85);
+		Teacher teacher1 = new Teacher("Michael","Corneole","Michael123","michael@gmail.com",2000);
+		Manager manager1 = new Manager("Justin","Hewlett","Justin123","justin@gmail.com");
+		
+		query.addPerson(student1);
+		query.addPerson(manager1);
+		query.addPerson(teacher1);
+
 		window = primaryStage;
 		window.setTitle("University Project");
 		
@@ -84,65 +83,33 @@ public class Main extends Application
 	}
 	
 	private void checkLogin(String email, String password) {
+		persons = query.getPersons();
+		boolean checkLogin = false;
 	
 		for(Person person : persons) {
 			if (email.trim().equals(person.getEmail()) && password.trim().equals(person.getPassword())) {
-				if (person instanceof Manager) {
-					currentManager = (Manager) person;
+
+				if (person.type == AccessType.ADMIN) {
+					managerView managerView = new managerView(query, window);
 				}
-				else if(person instanceof Teacher) {
-					currentTeacher = (Teacher)person;
+				else if(person.type == AccessType.EDITOR) {
+					teacherView teacherView = new teacherView(window, query);
+					
 				}
-				else if(person instanceof Student) {
-					currentStudent = (Student)person;
-					displayHomeScene();
+				else if(person.type == AccessType.BASIC) {
+					studentView studentView = new studentView(query, window);
 				}
-				break;
+				checkLogin = true;
 			}
 		}
+		
+		if (checkLogin == false) {
+			showMessageDialog(null, "Wrong email or password");
+		} 
 	}
 	
-	private void displayHomeScene() {
 
-		VBox vBox = new VBox();
 	
-		TableColumn<Teacher,String> fnamecolumn = new TableColumn<>("First Name");
-		fnamecolumn.setMinWidth(200);
-		fnamecolumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-		
-		TableColumn<Teacher,String> lnamecolumn = new TableColumn<>("Last Name");
-		lnamecolumn.setMinWidth(200);
-		lnamecolumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));		
-		
-		TableColumn<Teacher,String> emailcolumn = new TableColumn<>("email");
-		emailcolumn.setMinWidth(200);
-		emailcolumn.setCellValueFactory(new  PropertyValueFactory<>("email"));		
-		
-		teacherView = new TableView<>();
-		//teacherView.setItems(getTeacher());
-		
-		teacherView.getItems().setAll(getTeacher());
-	
-		teacherView.getColumns().addAll(fnamecolumn, lnamecolumn,emailcolumn);
-		
-		vBox.getChildren().addAll(teacherView);
-		
 
-		sceneHome = new Scene(vBox, 1000, 1000);
-		window.setScene(sceneHome);
-	}
-	
-	
-	private ObservableList<Teacher> getTeacher() {
-		ObservableList<Teacher> teachers = FXCollections.observableArrayList();
-		for(Person person : persons) 
-		{
-			if (person instanceof Teacher) {
-				teachers.add((Teacher) person);
-			}		
-		}
-		
-		return teachers;
-	}
 }
 
