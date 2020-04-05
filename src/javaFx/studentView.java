@@ -15,7 +15,4 @@ public class studentView extends userView{
 		super(query, window);
 		super.displayHomeScene();
 	}
-	
-	
-	
 }

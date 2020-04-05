@@ -31,6 +31,12 @@ public class teacherView extends userView {
 		Label classstudent = new Label("Student Class");
 		TextField classinput = new TextField();
 		
+		Label birthDate = new Label("Student Birth Date");
+		TextField birthDate1 = new TextField();
+		birthDate1.setPromptText("yyyy/MM/dd");
+
+		
+		
 		Label javaGrade = new Label("Java Grade");
 		javaInput = new TextField();
 		
@@ -38,20 +44,20 @@ public class teacherView extends userView {
 		csInput = new TextField();
 		
 		Button addbtn = new Button("Add Students");	
-		addbtn.setOnAction(e -> addStudent(emailinput.getText(), passinput.getText(), firstnameInput.getText(),lastNameInput.getText(),classinput.getText()));
+		addbtn.setOnAction(e -> addStudent(emailinput.getText(), passinput.getText(), firstnameInput.getText(),lastNameInput.getText(),classinput.getText(), birthDate1.getText()));
 		
 		Label noticelbl = new Label("Fill Email to update grade");
 		Button updateGradebtn = new Button("Update Grade");	
 		updateGradebtn.setOnAction(e -> updateGrade(emailinput.getText()));
 		
 		super.vBox.getChildren().addAll(uname,emailinput,password,passinput,fnamelbl,firstnameInput,lnamelbl,lastNameInput,classstudent,classinput
-				,javaGrade,javaInput,csGrade,csInput,addbtn, noticelbl, updateGradebtn);
+				,birthDate, birthDate1,javaGrade,javaInput,csGrade,csInput,addbtn, noticelbl, updateGradebtn);
 		
 	}
 
-	private void addStudent(String email, String pass, String fname, String lname, String classstud) {
+	private void addStudent(String email, String pass, String fname, String lname, String classstud,  String birthDate) {
 		try {
-			query.addPerson(new Student(fname,lname,classstud,pass,email));
+			query.addPerson(new Student(fname,lname,classstud,pass,email, birthDate));
 			
 			updateGrade(email);
 		} catch (Exception e) {
@@ -94,7 +100,7 @@ public class teacherView extends userView {
 			query.setGrade(email, "java", javagrade);
 			query.setGrade(email, "csharp", csgrade);
 			
-			teacherView teacherView = new teacherView(window, query);
+			new teacherView(window, query);
 		} catch (Exception e) {
 			showMessageDialog(null, e);
 		}

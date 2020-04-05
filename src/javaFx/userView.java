@@ -42,6 +42,7 @@ TableView<Student> studentView;
 		window.setScene(sceneHome);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void makeTeacherTable() {
 		TableColumn<Teacher,String> fnamecolumn = new TableColumn<>("First Name");
 		fnamecolumn.setMinWidth(200);
@@ -53,13 +54,21 @@ TableView<Student> studentView;
 		
 		TableColumn<Teacher,String> emailcolumn = new TableColumn<>("email");
 		emailcolumn.setMinWidth(200);
-		emailcolumn.setCellValueFactory(new  PropertyValueFactory<>("email"));		
+		emailcolumn.setCellValueFactory(new  PropertyValueFactory<>("email"));	
+		
+		TableColumn<Teacher,String> agecol = new TableColumn<>("Age");
+		agecol.setMinWidth(200);
+		agecol.setCellValueFactory(new  PropertyValueFactory<>("age"));		
+		
+		TableColumn<Teacher,String> datecol = new TableColumn<>("BirthDate");
+		datecol.setMinWidth(200);
+		datecol.setCellValueFactory(new  PropertyValueFactory<>("birthDate"));	
 		
 		teacherView = new TableView<>();
 		
 		FillTeacherTable();
 
-		teacherView.getColumns().addAll(fnamecolumn, lnamecolumn,emailcolumn);
+		teacherView.getColumns().addAll(fnamecolumn, lnamecolumn,emailcolumn,agecol,datecol);
 		
 		teacherView.autosize();
 		
@@ -70,18 +79,27 @@ TableView<Student> studentView;
 		teacherView.getItems().setAll(query.getTeacher());
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void makeStudentTable() {
 		TableColumn<Student,String> fnamecolumn = new TableColumn<>("First Name");
-		fnamecolumn.setMinWidth(200);
+		fnamecolumn.setMinWidth(100);
 		fnamecolumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		
 		TableColumn<Student,String> lnamecolumn = new TableColumn<>("Last Name");
-		lnamecolumn.setMinWidth(200);
+		lnamecolumn.setMinWidth(100);
 		lnamecolumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));		
 		
 		TableColumn<Student,String> emailcolumn = new TableColumn<>("email");
-		emailcolumn.setMinWidth(200);
+		emailcolumn.setMinWidth(100);
 		emailcolumn.setCellValueFactory(new  PropertyValueFactory<>("email"));	
+		
+		TableColumn<Student,String> agecol = new TableColumn<>("Age");
+		agecol.setMinWidth(100);
+		agecol.setCellValueFactory(new  PropertyValueFactory<>("age"));	
+		
+		TableColumn<Student,String> datecol = new TableColumn<>("BirthDate");
+		datecol.setMinWidth(100);
+		datecol.setCellValueFactory(new  PropertyValueFactory<>("birthDate"));	
 
 		TableColumn<Student,String> classcolumn = new TableColumn<>("Class");
 		classcolumn.setMinWidth(100);
@@ -99,7 +117,7 @@ TableView<Student> studentView;
 		
 		studentView = new TableView<>();
 		FillStudentTable();
-		studentView.getColumns().addAll(fnamecolumn, lnamecolumn,emailcolumn,classcolumn,javacol,cscol);
+		studentView.getColumns().addAll(fnamecolumn, lnamecolumn,emailcolumn,agecol,datecol,classcolumn,javacol,cscol);
 		
 		studentView.autosize();	
 	}

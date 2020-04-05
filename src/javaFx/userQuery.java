@@ -46,7 +46,11 @@ public class userQuery {
 		return student;
 	}
 	public void addPerson(Person person) {
-		persons.add(person);
+		try {
+			persons.add(person);
+		} catch (Exception e) {
+			showMessageDialog(null, e);
+		}
 	}
 	
 	public ObservableList<Person> getPersons() {
@@ -71,19 +75,24 @@ public class userQuery {
 	}
 	
 	public void modifyTeacher(String oldemail, String newemail, String pass, String firstn, String lastn, int salary) {
-		for(Person person : persons) 
-		{
-			if (person instanceof Teacher) {
-				if (person.getEmail().trim().equals(oldemail)) {
-					person.setEmail(newemail);
-					person.setFirstName(firstn);
-					person.setLastName(lastn);
-					person.setPassword(pass);
-					((Teacher) person).setSalary(salary);
-					
-				}
-			}		
+		try {
+			for(Person person : persons) 
+			{
+				if (person instanceof Teacher) {
+					if (person.getEmail().trim().equals(oldemail)) {
+						person.setEmail(newemail);
+						person.setFirstName(firstn);
+						person.setLastName(lastn);
+						person.setPassword(pass);
+						((Teacher) person).setSalary(salary);
+						
+					}
+				}		
+			}
+		} catch (Exception e) {
+			showMessageDialog(null, e);
 		}
+		
 	}
 
 }

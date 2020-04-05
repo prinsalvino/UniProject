@@ -15,23 +15,15 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import com.itextpdf.io.IOException;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfVersion;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.WriterProperties;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Text;
+import javax.swing.JFrame;
 
 
 public class managerView extends userView{
 
-	private static final String OUTPUT_FILE = "results/prins.pdf";
 
 	public managerView(userQuery query, Stage window) {
 		super(query, window);
@@ -59,39 +51,43 @@ public class managerView extends userView{
 		Label salarylbl = new Label("Teacher Salary");
 		TextField salaryInput = new TextField();
 		
+		Label bdate = new Label("Teacher Birthdate");
+		TextField bdatei = new TextField();
+		bdatei.setPromptText("yyyy/MM/dd");
+		
 		
 		Button addbtn = new Button("Add Teacher");	
-		addbtn.setOnAction(e -> addTeacher(emailinput.getText(), passinput.getText(), firstnameInput.getText(),lastNameInput.getText(),salaryInput.getText()));
+		addbtn.setOnAction(e -> addTeacher(emailinput.getText(), passinput.getText(), firstnameInput.getText(),lastNameInput.getText(),salaryInput.getText(), bdatei.getText()));
 		
 		Button updateTeacher = new Button("Update Teacher Information");	
 		updateTeacher.setOnAction(e -> updateTeacherForm());
 		
-		Button makepdf = new Button("Make PDF");	
-		makepdf.setOnAction(e -> {
+		Button makenotepad = new Button("Make Notepad");	
+		makenotepad.setOnAction(e -> {
 			try {
 				createDocument();
-			} 
-			catch (java.io.IOException e1) {
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
+
 		
 		
-		super.vBox.getChildren().addAll(uname,emailinput,password,passinput,fnamelbl,firstnameInput,lnamelbl,lastNameInput,salarylbl,salaryInput
-			,addbtn,  updateTeacher);
+		super.vBox.getChildren().addAll(uname,emailinput,password,passinput,fnamelbl,firstnameInput,lnamelbl,lastNameInput,salarylbl,salaryInput, bdate, bdatei
+			,addbtn,  updateTeacher, makenotepad);
 	
 	}
 	
-	private void addTeacher(String email, String pass, String fname, String lname, String ssalary) {
+	private void addTeacher(String email, String pass, String fname, String lname, String ssalary, String birtDate) {
 		try {
 			int salary = 0;
-			if (ssalary == null) {
+			if (ssalary == "") {
 				salary = 0;
 			} else {
 				salary = Integer.parseInt(ssalary);
 			}
-			query.addPerson(new Teacher(fname, lname, pass, email, salary));
+			query.addPerson(new Teacher(fname, lname, pass, email, salary, birtDate));
 			super.FillTeacherTable();
 		} 
 		catch (Exception e) {
@@ -169,24 +165,41 @@ public class managerView extends userView{
 			}
 			
 			query.modifyTeacher(oldemail,newemail,pass, firstn, lastn, salary);
-			managerView managerView = new managerView(query, window);
+			new managerView(query, window);
 		} catch (Exception e) {
 			showMessageDialog(null, e);
 		}
 	}
 	
-	void createDocument() throws  java.io.IOException  {        
-		PdfWriter writer = new PdfWriter(OUTPUT_FILE);
-		PdfDocument pdfDocument = new PdfDocument(writer);
-		pdfDocument.setTagged();
-		Document document = new Document(pdfDocument);
-		
-		ObservableList<Person> perssons = query.getPersons();
-		
-		for (Person person : perssons) {
-			document.add(new Paragraph(person.getEmail() + person.getFirstName() + person.getLastName()));
+	void createDocument() throws IOException  {        
+		try {
+			PrintWriter out = new PrintWriter("report.txt");
+			ObservableList<Person> persons = query.getPersons();
+			for (Person person : persons) {
+				out.println("Name: " + person.getFirstName() + " " + person.getLastName());
+				out.println("Email: " + person.getEmail());
+				out.println("Birth Date:" + person.getBirthDate());
+				out.println("Age: " + person.getAge());
+				out.println("Type: " + person.getType());
+				if (person instanceof Student ) {
+					out.println("C#: " + ((Student) person).getCsharpGrade());
+					out.println("Java: " + ((Student) person).getJavaGrade());
+
+				}
+				else if (person instanceof Teacher) {
+					out.println("Salary: " +  ((Teacher) person).getSalary());
+				}
+				out.println("");
+			}
+			out.close();
+			showMessageDialog(null, "Notepad created in your Java Document");
+		} catch (Exception e) {
+			showMessageDialog(null, e);
+
 		}
-		document.close();
+	
+
+
 	}
 
 

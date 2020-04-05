@@ -36,9 +36,9 @@ public class Main extends Application
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Student student1 = new Student("Prins","Alvino","IT1","Prins123","prins@gmail.com",80,85);
-		Teacher teacher1 = new Teacher("Michael","Corneole","Michael123","michael@gmail.com",2000);
-		Manager manager1 = new Manager("Justin","Hewlett","Justin123","justin@gmail.com");
+		Student student1 = new Student("Prins","Alvino","IT1","Prins123","prins@gmail.com",80,85, "1994/06/23");
+		Teacher teacher1 = new Teacher("Michael","Corneole","Michael123","michael@gmail.com",2000, "1980/06/23");
+		Manager manager1 = new Manager("Justin","Hewlett","Justin123","justin@gmail.com", "1985/06/23");
 		
 		query.addPerson(student1);
 		query.addPerson(manager1);
@@ -90,14 +90,14 @@ public class Main extends Application
 			if (email.trim().equals(person.getEmail()) && password.trim().equals(person.getPassword())) {
 
 				if (person.type == AccessType.ADMIN) {
-					managerView managerView = new managerView(query, window);
+					new managerView(query, window);
 				}
 				else if(person.type == AccessType.EDITOR) {
-					teacherView teacherView = new teacherView(window, query);
+					new teacherView(window, query);
 					
 				}
 				else if(person.type == AccessType.BASIC) {
-					studentView studentView = new studentView(query, window);
+					new studentView(query, window);
 				}
 				checkLogin = true;
 			}
